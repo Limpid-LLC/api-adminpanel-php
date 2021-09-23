@@ -1,9 +1,6 @@
 name: Build PHP images
 on:
   push:
-    branches:
-      - 'ci'
-      - 'dev'
   workflow_dispatch:
 
 env:
