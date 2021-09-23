@@ -1,0 +1,53 @@
+name: Build PHP images
+on:
+  push:
+    branches:
+      - 'ci'
+      - 'dev'
+  workflow_dispatch:
+
+env:
+  DEV_PHP_FPM_IMAGE_NAME: ghcr.io/limpid-llc/php-fpm-8.0-dev:latest
+  DEV_PHP_CLI_IMAGE_NAME: ghcr.io/limpid-llc/php-cli-8.0-dev:latest
+
+jobs:
+  build-and-push-php-cli-docker-image:
+    runs-on:
+      - self-hosted
+      - builder
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Login to docker registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build image
+        run: docker build --pull --progress plain -t php:dev -t $DEV_PHP_CLI_IMAGE_NAME -f php-cli.Dockerfile .
+
+      - name: Show PHP version and modules, installed in docker image
+        run: docker run --rm php:dev sh -c "php -v && php -m"
+
+      - name: Push docker image to registry
+        run: docker push $DEV_PHP_CLI_IMAGE_NAME
+  build-and-push-php-fpm-docker-image:
+    needs:
+      - build-and-push-php-docker-image
+    runs-on:
+      - self-hosted
+      - builder
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Login to docker registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build image
+        run: docker build --pull --progress plain -t api-adminpanel-dev:dev -t $DEV_PHP_FPM_IMAGE_NAME -f php-fpm.Dockerfile .
+
+      - name: Show PHP and Laravel version, installed in docker image
+        run: docker run --rm api-adminpanel-dev:dev sh -c "php -v && php artisan -V"
+
+      - name: Push docker image to registry
+        run: docker push $DEV_PHP_FPM_IMAGE_NAME
