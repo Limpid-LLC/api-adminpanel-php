@@ -28,8 +28,6 @@ jobs:
       - name: Push docker image to registry
         run: docker push $DEV_PHP_CLI_IMAGE_NAME
   build-and-push-php-fpm-docker-image:
-    needs:
-      - build-and-push-php-docker-image
     runs-on:
       - self-hosted
       - builder
