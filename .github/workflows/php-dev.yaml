@@ -41,8 +41,8 @@ jobs:
       - name: Build image
         run: docker build --pull --progress plain -t api-adminpanel-dev:dev -t $DEV_PHP_FPM_IMAGE_NAME -f php-fpm.Dockerfile .
 
-      - name: Show PHP and Laravel version, installed in docker image
-        run: docker run --rm api-adminpanel-dev:dev sh -c "php -v && php artisan -V"
+      - name: Show PHP version and modules, installed in docker image
+        run: docker run --rm php:dev sh -c "php -v && php -m"
 
       - name: Push docker image to registry
         run: docker push $DEV_PHP_FPM_IMAGE_NAME
