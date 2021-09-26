@@ -42,7 +42,7 @@ jobs:
         run: docker build --pull --progress plain -t ${{ matrix.local-name }} -t ${UPLOAD_REPOSITORY}${{ matrix.upload-tag }} -f ${{ matrix.dockerfile }} .
 
       - name: Show PHP version and modules, installed in docker image
-        run: docker run --rm ${{ matrix.dockerfile }} sh -c "php -v && php -m"
+        run: docker run --rm ${{ matrix.local-name }} sh -c "php -v && php -m"
 
       - name: Push docker image to registry
         run: docker push ${UPLOAD_REPOSITORY}${{ matrix.upload-tag }}
