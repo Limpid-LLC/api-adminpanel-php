@@ -39,10 +39,10 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build image
-        run: docker build --pull --progress plain -t ${{ matrix.local-name }} -t $UPLOAD_REPOSITORY${{ matrix.upload-tag }} -f ${{ matrix.dockerfile }} .
+        run: docker build --pull --progress plain -t ${{ matrix.local-name }} -t ${UPLOAD_REPOSITORY}${{ matrix.upload-tag }} -f ${{ matrix.dockerfile }} .
 
       - name: Show PHP version and modules, installed in docker image
         run: docker run --rm ${{ matrix.dockerfile }} sh -c "php -v && php -m"
 
       - name: Push docker image to registry
-        run: docker push $UPLOAD_REPOSITORY${{ matrix.upload-tag }}
+        run: docker push ${UPLOAD_REPOSITORY}${{ matrix.upload-tag }}
