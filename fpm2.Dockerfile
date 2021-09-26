@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.2
 
-FROM --platform=linux/amd64 php:8.0-cli-alpine3.14 as runtime
+FROM --platform=linux/amd64 php:8.0-fpm-alpine3.14 as runtime
 
 LABEL org.opencontainers.image.source=https://github.com/Limpid-LLC/api-adminpanel-php
 
