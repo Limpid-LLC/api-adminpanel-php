@@ -6,14 +6,32 @@ on:
   workflow_dispatch:
 
 env:
-  DEV_PHP_FPM_IMAGE_NAME: ghcr.io/limpid-llc/php-fpm-8.0-dev:latest
-  DEV_PHP_CLI_IMAGE_NAME: ghcr.io/limpid-llc/php-cli-8.0-dev:latest
+  UPLOAD_REPOSITORY: ghcr.io/limpid-llc/
 
 jobs:
-  build-and-push-php-cli-docker-image:
+  build-and-push-php-docker-images:
     runs-on:
       - self-hosted
       - builder
+    strategy:
+      matrix:
+       include:
+         - php-type: "fpm"
+           local-name: "fpm:dev"
+           dockerfile: "fpm.Dockerfile"
+           upload-tag: "php-fpm-8.0-dev:latest"
+         - php-type: "cli"
+           local-name: "cli:dev"
+           dockerfile: "cli.Dockerfile"
+           upload-tag: "php-cli-8.0-dev:latest"
+         - php-type: "fpm2"
+           local-name: "fpm2:dev"
+           dockerfile: "fpm2.Dockerfile"
+           upload-tag: "php-fpm-8.0-dev:test"
+         - php-type: "cli2"
+           local-name: "cli2:dev"
+           dockerfile: "cli2.Dockerfile"
+           upload-tag: "php-cli-8.0-dev:test"
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -22,29 +40,10 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build image
-        run: docker build --pull --progress plain -t php:dev -t $DEV_PHP_CLI_IMAGE_NAME -f php-cli.Dockerfile .
+        run: docker build --pull --progress plain -t ${{ matrix.local-name }} -t $UPLOAD_REPOSITORY${{ matrix.upload-tag }} -f ${{ matrix.dockerfile }} .
 
       - name: Show PHP version and modules, installed in docker image
-        run: docker run --rm php:dev sh -c "php -v && php -m"
+        run: docker run --rm ${{ matrix.dockerfile }} sh -c "php -v && php -m"
 
       - name: Push docker image to registry
-        run: docker push $DEV_PHP_CLI_IMAGE_NAME
-  build-and-push-php-fpm-docker-image:
-    runs-on:
-      - self-hosted
-      - builder
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-
-      - name: Login to docker registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Build image
-        run: docker build --pull --progress plain -t api-adminpanel-dev:dev -t $DEV_PHP_FPM_IMAGE_NAME -f php-fpm.Dockerfile .
-
-      - name: Show PHP version and modules, installed in docker image
-        run: docker run --rm php:dev sh -c "php -v && php -m"
-
-      - name: Push docker image to registry
-        run: docker push $DEV_PHP_FPM_IMAGE_NAME
+        run: docker push $UPLOAD_REPOSITORY${{ matrix.upload-tag }}
