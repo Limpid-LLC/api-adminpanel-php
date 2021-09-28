@@ -11,11 +11,7 @@ ENV COMPOSER_HOME="/tmp/composer"
 ENV PHP_EXT_MPDECIMAL_VERSION 2.5.1
 ENV PHP_EXT_REDIS_VERSION 5.3.4
 
-RUN apk add gnu-libiconv=1.15-r3 --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.13/community/ --allow-untrusted \
-    rm -rf \
-      /tmp/* \
-      /var/cache/apk/* \
-      /var/lib/apt/lists/*
+RUN apk add gnu-libiconv=1.15-r3 --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.13/community/ --allow-untrusted
 
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so
 
