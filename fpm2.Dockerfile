@@ -13,7 +13,9 @@ ENV COMPOSER_HOME="/tmp/composer"
 
 RUN set -x \
     && apk add --no-cache \
+        busybox \
         ca-certificates \
+        fcgi \
         tzdata \
     && cp /usr/share/zoneinfo/Europe/Kiev /etc/localtime && \
     echo "Europe/Kiev" > /etc/timezone && \

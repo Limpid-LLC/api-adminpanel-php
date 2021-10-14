@@ -18,7 +18,9 @@ ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so
 RUN set -x \
     # install permanent dependencies
     && apk add --no-cache \
+        busybox \
         ca-certificates \
+        fcgi \
         freetds \
         freetype \
         gettext \
