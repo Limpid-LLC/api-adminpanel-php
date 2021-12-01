@@ -172,8 +172,9 @@ RUN set -eux \
     # make clean up
     && docker-php-source delete \
     && apk del .build-deps \
-    # enable opcache for CLI and JIT, docs: <https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.jit>
-    && echo -e "\nopcache.enable=1\nopcache.enable_cli=1\nopcache.jit_buffer_size=32M\nopcache.jit=1235\n" >> \
+    # enable opcache for CLI and JIT, docs: <https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.jit> \
+    # cant use 1233+ cuz of JIT bug with PDF generation
+    && echo -e "\nopcache.enable=1\nopcache.enable_cli=1\nopcache.jit_buffer_size=32M\nopcache.jit=1232\n" >> \
         ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
     #php-fpm healthcheck https://github.com/renatomefi/php-fpm-healthcheck
     && curl -Lo /usr/local/bin/php-fpm-healthcheck \
