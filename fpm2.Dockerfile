@@ -66,7 +66,7 @@ RUN set -eux \
         echo "ffi.enable = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-ffi.ini; \
     fi \
     # enable opcache for CLI and JIT, docs: <https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.jit>
-    && echo -e "\nopcache.enable=1\nopcache.enable_cli=1\nopcache.jit_buffer_size=32M\nopcache.jit=1235\n" >> \
+    && echo -e "\nopcache.enable=1\nopcache.enable_cli=1\nopcache.jit_buffer_size=32M\nopcache.jit=1232\n" >> \
         ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
     #php-fpm healthcheck https://github.com/renatomefi/php-fpm-healthcheck
     && curl -Lo /usr/local/bin/php-fpm-healthcheck \
