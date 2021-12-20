@@ -11,6 +11,10 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 ENV COMPOSER_HOME="/tmp/composer"
 
+RUN apk add gnu-libiconv=1.15-r3 --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.13/community/ --allow-untrusted
+
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so
+
 RUN set -x \
     # install permanent dependencies
     && apk add --no-cache \
