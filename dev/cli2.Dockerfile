@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.2
 
-FROM --platform=linux/amd64 php:8.0-fpm-alpine3.14 as runtime
+FROM --platform=linux/amd64 php:8.0-cli-alpine3.14 as runtime
 
 LABEL org.opencontainers.image.source=https://github.com/Limpid-LLC/api-adminpanel-php
 
@@ -12,10 +12,9 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 ENV COMPOSER_HOME="/tmp/composer"
 
 RUN set -x \
+    # install permanent dependencies
     && apk add --no-cache \
-        busybox \
         ca-certificates \
-        fcgi \
         tzdata \
     && cp /usr/share/zoneinfo/Europe/Kiev /etc/localtime && \
     echo "Europe/Kiev" > /etc/timezone && \
@@ -65,10 +64,13 @@ RUN set -eux \
     && if [ -f /usr/local/etc/php/conf.d/docker-php-ext-ffi.ini ]; then \
         echo "ffi.enable = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-ffi.ini; \
     fi \
-    # enable opcache for CLI and JIT, docs: <https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.jit>
+    # install supercronic (for laravel task scheduling), project page: <https://github.com/aptible/supercronic>
+    && wget -q "https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-amd64" \
+         -O /usr/bin/supercronic \
+    && chmod +x /usr/bin/supercronic \
+    && mkdir /etc/supercronic \
+    && echo '*/1 * * * * php /app/artisan schedule:run' > /etc/supercronic/laravel \
+    # enable opcache for CLI and JIT, docs: <https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.jit> \
+    # cant use 1233+ cuz of JIT bug with PDF generation
     && echo -e "\nopcache.enable=1\nopcache.enable_cli=1\nopcache.jit_buffer_size=32M\nopcache.jit=1232\n" >> \
-        ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
-    #php-fpm healthcheck https://github.com/renatomefi/php-fpm-healthcheck
-    && curl -Lo /usr/local/bin/php-fpm-healthcheck \
-    https://raw.githubusercontent.com/renatomefi/php-fpm-healthcheck/master/php-fpm-healthcheck \
-    && chmod +x /usr/local/bin/php-fpm-healthcheck
+        ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini
