@@ -18,11 +18,11 @@ jobs:
          - php-type: "fpm"
            local-name: "fpm:prod"
            dockerfile: "prod/fpm.Dockerfile"
-           upload-tag: "php-fpm-8.0-prod:latest"
+           upload-tag: "php-fpm:8.0-prod"
          - php-type: "cli"
            local-name: "cli:prod"
            dockerfile: "prod/cli.Dockerfile"
-           upload-tag: "php-cli-8.0-prod:latest"
+           upload-tag: "php-cli:8.0-prod"
     steps:
       - name: Check out code
         uses: actions/checkout@v2

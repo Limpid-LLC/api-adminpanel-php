@@ -18,19 +18,19 @@ jobs:
          - php-type: "fpm"
            local-name: "fpm:dev"
            dockerfile: "dev/fpm.Dockerfile"
-           upload-tag: "php-fpm-8.0-dev:latest"
+           upload-tag: "php-fpm:8.0-dev"
          - php-type: "cli"
            local-name: "cli:dev"
            dockerfile: "dev/cli.Dockerfile"
-           upload-tag: "php-cli-8.0-dev:latest"
+           upload-tag: "php-cli:8.0-dev"
          - php-type: "fpm2"
            local-name: "fpm2:dev"
            dockerfile: "dev/fpm2.Dockerfile"
-           upload-tag: "php-fpm-8.0-dev:test"
+           upload-tag: "php-fpm:8.0-dev-test"
          - php-type: "cli2"
            local-name: "cli2:dev"
            dockerfile: "dev/cli2.Dockerfile"
-           upload-tag: "php-cli-8.0-dev:test"
+           upload-tag: "php-cli:8.0-dev-test"
     steps:
       - name: Check out code
         uses: actions/checkout@v2
