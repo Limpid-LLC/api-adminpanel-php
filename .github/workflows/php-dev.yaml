@@ -1,4 +1,4 @@
-name: Build PHP images
+name: Build PHP dev images
 on:
   push:
   schedule:
