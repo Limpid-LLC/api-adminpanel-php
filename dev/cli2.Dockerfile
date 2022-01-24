@@ -11,6 +11,16 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 ENV COMPOSER_HOME="/tmp/composer"
 
+ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-amd64 \
+    SUPERCRONIC=supercronic-linux-amd64 \
+    SUPERCRONIC_SHA1SUM=048b95b48b708983effb2e5c935a1ef8483d9e3e
+
+RUN curl -fsSLO "$SUPERCRONIC_URL" \
+    && echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - \
+    && chmod +x "$SUPERCRONIC" \
+    && mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" \
+    && ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
+
 RUN install-php-extensions \
     bcmath \
     decimal \
@@ -36,12 +46,3 @@ RUN install-php-extensions \
     yaml \
     zip \
     zstd
-    
-RUN set -eux \
-    # install supercronic (for laravel task scheduling), project page: <https://github.com/aptible/supercronic>
-    && wget -q "https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-amd64" \
-         -O /usr/bin/supercronic \
-    && chmod +x /usr/bin/supercronic \
-    && mkdir /etc/supercronic \
-    && echo '*/1 * * * * php /app/artisan schedule:run' > /etc/supercronic/laravel \
-
