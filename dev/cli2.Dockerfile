@@ -40,6 +40,7 @@ RUN install-php-extensions \
     pgsql \
     psr \
     redis \
+    soap \
     ssh2 \
     tidy \
     vips \
