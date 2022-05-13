@@ -159,7 +159,6 @@ RUN set -eux \
     # Enable extensions
     && docker-php-ext-enable \
     oauth \
-    psr \
     ssh2 \
     yaml \
     mcrypt \

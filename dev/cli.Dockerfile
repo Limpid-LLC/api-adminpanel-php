@@ -112,7 +112,6 @@ RUN set -eux \
     # Pecl install extensions
     && pecl install \
     oauth \
-    psr \
     ssh2-1.3.1 \
     yaml \
     vips \

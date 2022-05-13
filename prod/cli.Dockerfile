@@ -48,7 +48,6 @@ RUN install-php-extensions \
     pdo_mysql \
     pdo_pgsql \
     pgsql \
-    psr \
     redis \
     soap \
     sockets \
