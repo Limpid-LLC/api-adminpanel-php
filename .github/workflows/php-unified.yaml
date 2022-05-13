@@ -1,10 +1,10 @@
-name: Build PHP dev test images
+name: Build PHP unified image
 on:
   push:
     paths:
-      - '.github/workflows/php-dev.yaml'
-      - 'dev/cli2.Dockerfile'
-      - 'dev/fpm2.Dockerfile'
+      - '.github/workflows/php-unified.yaml'
+      - 'unified/8.0.Dockerfile'
+      - 'unified/8.1.Dockerfile'
   schedule:
     - cron: "0 2 * * *"
   workflow_dispatch:
@@ -19,14 +19,14 @@ jobs:
     strategy:
       matrix:
        include:
-         - php-type: "fpm-test"
-           local-name: "fpm2:dev"
-           dockerfile: "dev/fpm2.Dockerfile"
-           upload-tag: "php-fpm:8.0-dev-test"
-         - php-type: "cli-test"
-           local-name: "cli2:dev"
-           dockerfile: "dev/cli2.Dockerfile"
-           upload-tag: "php-cli:8.0-dev-test"
+         - php-type: "8.1"
+           local-name: "unified-8.1"
+           dockerfile: "unified/8.1.Dockerfile"
+           upload-tag: "php-unified-8.1:latest"
+         - php-type: "8.0"
+           local-name: "unified-8.0"
+           dockerfile: "unified/8.0.Dockerfile"
+           upload-tag: "php-unified-8.0:latest"
     steps:
       - name: Check out code
         uses: actions/checkout@v2

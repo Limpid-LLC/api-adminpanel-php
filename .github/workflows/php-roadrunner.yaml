@@ -1,0 +1,32 @@
+name: Build PHP roadrunner image
+on:
+  push:
+    paths:
+      - '.github/workflows/php-roadrunner.yaml'
+      - 'roadrunner/Dockerfile'
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+env:
+  UPLOAD_REPOSITORY: ghcr.io/limpid-llc/php-8.1-roadrunner:latest
+
+jobs:
+  build-and-push-php-docker-images:
+    runs-on:
+      - ubuntu-20.04
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Login to docker registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build image
+        run: docker build --pull --progress plain -t php-roadrunner -t ${UPLOAD_REPOSITORY} -f roadrunner/Dockerfile .
+
+      - name: Show PHP version and modules, installed in docker image
+        run: docker run --rm php-roadrunner sh -c "php -v && php -m"
+
+      - name: Push docker image to registry
+        run: docker push ${UPLOAD_REPOSITORY}

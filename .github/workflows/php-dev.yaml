@@ -1,6 +1,10 @@
 name: Build PHP dev images
 on:
   push:
+    paths:
+      - '.github/workflows/php-dev.yaml'
+      - 'dev/cli.Dockerfile'
+      - 'dev/fpm.Dockerfile'
   schedule:
     - cron: "0 2 * * *"
   workflow_dispatch:

@@ -1,6 +1,10 @@
 name: Build PHP prod images
 on:
   push:
+    paths:
+      - '.github/workflows/php-prod.yaml'
+      - 'prod/cli.Dockerfile'
+      - 'prod/fpm.Dockerfile'
   schedule:
     - cron: "0 2 * * *"
   workflow_dispatch:
