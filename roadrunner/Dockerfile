@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.2
 FROM ghcr.io/roadrunner-server/roadrunner:2.9.4 AS roadrunner
 FROM mlocati/php-extension-installer:latest AS extension-installer
-FROM --platform=linux/amd64 php:8.1-fpm-alpine as runtime
+FROM --platform=linux/amd64 php:8.1-cli-alpine as runtime
 
 LABEL org.opencontainers.image.source=https://github.com/Limpid-LLC/api-adminpanel-php
 
