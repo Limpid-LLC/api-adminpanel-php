@@ -29,6 +29,7 @@ RUN install-php-extensions \
     pgsql \
     redis \
     soap \
+    sockets \
     ssh2 \
     tidy \
     vips \

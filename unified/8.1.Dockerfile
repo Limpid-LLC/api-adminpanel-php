@@ -30,6 +30,7 @@ RUN apk add --no-cache bash && \
     pgsql \
     redis \
     soap \
+    sockets \
     ssh2 \
     tidy \
     vips \
