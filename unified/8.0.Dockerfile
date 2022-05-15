@@ -1,16 +1,19 @@
 # syntax=docker/dockerfile:1.2
 
-FROM premoweb/chadburn:1.0.1 as cron
 FROM --platform=linux/amd64 php:8.0-fpm-alpine as runtime
 
 LABEL org.opencontainers.image.source=https://github.com/Limpid-LLC/api-adminpanel-php
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-COPY --from=cron /usr/bin/chadburn /usr/local/bin/
 
 ENV COMPOSER_HOME="/tmp/composer"
 
-RUN apk add --no-cache bash && \
+RUN wget -q "https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-amd64" \
+    -O /usr/bin/supercronic && \
+    chmod +x /usr/bin/supercronic && \
+    mkdir /etc/supercronic && \
+    echo '*/1 * * * * php /app/artisan schedule:run' > /etc/supercronic/laravel && \
+    apk add --no-cache bash && \
     install-php-extensions \
     @composer \
     bcmath \
