@@ -11,8 +11,6 @@ ENV COMPOSER_HOME="/tmp/composer"
 RUN wget -q "https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-amd64" \
     -O /usr/bin/supercronic && \
     chmod +x /usr/bin/supercronic && \
-    mkdir /etc/supercronic && \
-    echo '*/1 * * * * php /app/artisan schedule:run' > /etc/supercronic/laravel && \
     apk add --no-cache bash && \
     install-php-extensions \
     @composer \
