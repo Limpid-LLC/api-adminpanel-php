@@ -23,10 +23,6 @@ jobs:
            local-name: "unified-8.1"
            dockerfile: "unified/8.1.Dockerfile"
            upload-tag: "php-unified-8.1:latest"
-         - php-type: "8.0"
-           local-name: "unified-8.0"
-           dockerfile: "unified/8.0.Dockerfile"
-           upload-tag: "php-unified-8.0:latest"
     steps:
       - name: Check out code
         uses: actions/checkout@v2
